@@ -16,18 +16,21 @@
                   Enter column names separated by comma
                 </template>
               </q-input>
-              <q-btn label="Copy" @click="copyToClipboards" />
+              <q-btn label="Copy Column" size="sm" @click="copyToClipboards" />
             </q-form>
           </div>
           <div class="col-12 row">
-            <div class="col-12">
-              <pre>{{ formatColumns() }}</pre>
+            <div class="col-12 col-md-2">
+              <div style="font-size: 0.5rem;">
+
+                <pre>{{ formatColumns() }}</pre>
+              </div>
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-10">
               <q-card>
                 <q-card-section> Generated Table </q-card-section>
                 <q-card-section>
-                  <q-table :columns="finalColumns as any" :rows="[]" />
+                  <q-table :columns="exceptIndexAndActions as NonNullable<QTableProps['columns']>"  :rows="rows" row-key="index"  />
                 </q-card-section>
               </q-card>
             </div>
@@ -39,8 +42,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Ref, ref } from 'vue';
-import { copyToClipboard, Notify, QForm } from 'quasar';
+import { computed, Ref, ref } from 'vue';
+import { copyToClipboard, Notify, QForm,QTableProps } from 'quasar';
 const required = (val: string): true | string => {
   if (!val || val.length === 0) {
     return 'This field is required';
@@ -82,6 +85,7 @@ const validateAndGenerate = () => {
     ?.validate()
     .then(() => {
       generateColumns();
+
     })
     .catch(() => {
       Notify.create({
@@ -111,6 +115,7 @@ const generateColumns = () => {
   finalColumns.value = [indexColumn, ...newColumns, actionsColumn].filter(
     Boolean,
   ) as Column[];
+  generateRows();
 };
 
 const upperCaseWord = (str: string) => {
@@ -144,4 +149,20 @@ const copyToClipboards = async () => {
     });
   }
 };
+const rows=ref([]) as Ref<Record<string, string|number>[]>;
+const generateRows = () => {
+  rows.value = Array.from({ length: 50 }, (_, i) => {
+    const row: Record<string, string|number> = { index: i + 1 };
+    finalColumns.value.forEach((col) => {
+      if (col.name !== 'index' && col.name !== 'actions') {
+        row[col.name] = `Sample ${col.label} ${i + 1}`;
+      }
+    });
+    return row;
+  });
+};
+
+const exceptIndexAndActions = computed(() => {
+  return finalColumns.value.filter((col) => col.name !== 'index' && col.name !== 'actions');
+})
 </script>
