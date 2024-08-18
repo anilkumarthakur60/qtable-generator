@@ -1,6 +1,6 @@
-# quasar-table-column-generator (quasar-table-column-generator)
+# qtable-generator (qtable-generator)
 
-quasar-table-column-generator
+qtable-generator
 
 ## Install the dependencies
 
