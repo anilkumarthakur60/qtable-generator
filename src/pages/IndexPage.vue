@@ -134,7 +134,7 @@ const copyToClipboards = async () => {
   try {
     await copyToClipboard(formatColumns()).then(() => {
       Notify.create({
-        message: 'Text copied to clipboard',
+        message: 'Columns copied to clipboard',
         color: 'positive',
         position: 'center',
         timeout: 2000,
@@ -142,7 +142,7 @@ const copyToClipboards = async () => {
     });
   } catch (err) {
     Notify.create({
-      message: 'Failed to copy text to clipboard',
+      message: 'Failed to copy columns to clipboard',
       color: 'negative',
       position: 'top-right',
       timeout: 2000,
