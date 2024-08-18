@@ -1,10 +1,11 @@
+import IndexPage from 'src/pages/IndexPage.vue';
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    component: IndexPage,
+    name: 'Home',
   },
 
   // Always leave this as last one,
